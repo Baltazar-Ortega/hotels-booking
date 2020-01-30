@@ -25,8 +25,8 @@ object Application extends Controller {
       val rs = stmt.executeQuery("SELECT tick FROM ticks")
       val hotels = stmt.executeQuery("SELECT name FROM hotels")
 
-      while (rs.next) {
-        out += "Read from DB: " + rs.getTimestamp("tick") + "\n"
+      while (hotels.next) {
+        out += "Read from DB: " + rs.getString("name") + "\n"
       }
     } finally {
       conn.close()
