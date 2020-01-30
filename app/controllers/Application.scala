@@ -31,6 +31,6 @@ object Application extends Controller {
     } finally {
       conn.close()
     }
-    Ok(hotels)
+    Ok(out)
   }
 }
