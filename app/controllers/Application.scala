@@ -23,6 +23,7 @@ object Application extends Controller {
       stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
 
       val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      val hotels = stmt.executeQuery("SELECT name FROM hotels")
 
       while (rs.next) {
         out += "Read from DB: " + rs.getTimestamp("tick") + "\n"
@@ -30,6 +31,6 @@ object Application extends Controller {
     } finally {
       conn.close()
     }
-    Ok(out)
+    Ok(hotels)
   }
 }
