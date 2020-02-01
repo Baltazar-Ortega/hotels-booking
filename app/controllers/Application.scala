@@ -9,9 +9,11 @@ import play.api.db._
 
 object Application extends Controller {
 
+/*
   def hotel1 = Action {
-    Ok(views.html.hotel1(null))
+    Ok(views.html.hotel1)
   }
+  */
 
   def index = Action {
     Ok(views.html.index(null))
