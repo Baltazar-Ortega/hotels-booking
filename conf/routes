@@ -5,6 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index
 GET     /db                         controllers.Application.db
+GET     /hotel1                      controllers.Application.hotel1
+POST     /hotelPost                controllers.Application.hotelData
 
 
 # Map static resources from the /public folder to the /assets URL path

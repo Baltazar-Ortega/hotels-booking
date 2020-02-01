@@ -9,11 +9,37 @@ import play.api.db._
 
 object Application extends Controller {
 
-/*
+
   def hotel1 = Action {
-    Ok(views.html.hotel1)
+    Ok(views.html.hotel1(null))
   }
-  */
+  
+  def hotelData = Action { request =>
+    // print(request.body)
+    // print(request.body.asFormUrlEncoded)
+    val resRaw = request.body.asText.toString()
+    val res = resRaw.replaceAll("Some", "")
+    val resNoIzq = res.replace("(", "")
+    val newRes = resNoIzq.replace(")", "")
+    println("Esto es: " + newRes)
+    val arrayRes = newRes.split(",")
+
+    var str = "" 
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      str = "INSERT INTO hotels(name, city) VALUES ('" + arrayRes(0) + "','"+arrayRes(1)+"')"
+      print("STR: " + str)
+      stmt.executeUpdate(str)
+
+      
+    } finally {
+      conn.close()
+    }
+    Ok(views.html.index(null)) // Automatic Redirection doesnt work
+    
+  }
 
   def index = Action {
     Ok(views.html.index(null))
