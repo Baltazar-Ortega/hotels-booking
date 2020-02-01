@@ -9,6 +9,10 @@ import play.api.db._
 
 object Application extends Controller {
 
+  def hotel1 = Action {
+    Ok(views.html.hotel1(null))
+  }
+
   def index = Action {
     Ok(views.html.index(null))
   }
@@ -22,7 +26,7 @@ object Application extends Controller {
       stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
       stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
 
-      val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
       val hotels = stmt.executeQuery("SELECT name FROM hotels")
 
       while (hotels.next) {
@@ -33,4 +37,5 @@ object Application extends Controller {
     }
     Ok(out)
   }
+
 }
