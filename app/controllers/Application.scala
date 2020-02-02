@@ -15,6 +15,9 @@ object Application extends Controller {
   def hotel1 = Action {
     Ok(views.html.hotel1(null))
   }
+  def hotel3 = Action {
+    Ok(views.html.hotel3(null))
+  }
   def admin = Action {
     Ok(views.html.admin(null))
   }
