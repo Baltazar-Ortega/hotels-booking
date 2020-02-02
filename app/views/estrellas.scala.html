@@ -2,14 +2,13 @@
 
 
 @main("Scala Play forms tutorial") {
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
 
-    </body>
-</html>
+<script>
+        var x = prompt('Numero de estrellas')
+        console.log(x)
+        var oReq = new XMLHttpRequest()
+        oReq.open("post", `http://localhost:9000/estrellas`, true);
+        oReq.send(x)
+</script>
+    <body></body>
 }

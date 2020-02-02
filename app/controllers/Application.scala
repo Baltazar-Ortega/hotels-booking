@@ -49,13 +49,65 @@ object Application extends Controller {
     Ok(views.html.todo(hotels))
   }
 
-  def estrellas = Action {
+  def estrellas = Action { request=>
+    val valor=  request.body.asText.toString()
+    var hotels =  ArrayBuffer[String]()
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
+      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
+
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      val hotelsDB = stmt.executeQuery("SELECT name  FROM hotels WHERE estrellas='valor'")
+      while (hotelsDB.next) {
+        hotels += hotelsDB.getString("name")
+      }
+    } finally {
+      conn.close()
+    }
+
     Ok(views.html.estrellas(null))
   }
   def reservacion = Action {
+    var out = ""
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
+      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
+
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      val hotels = stmt.executeQuery("DELETE * FROM reservaciones")
+    } finally {
+      conn.close()
+    }
+
     Ok(views.html.reservacion(null))
   }
-  def menor = Action {
+  def menor () = Action { request =>
+    val valor=  request.body.asText.toString()
+    var hoteles =  ArrayBuffer[String]()
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
+      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
+
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      val hotels = stmt.executeQuery("SELECT name  FROM hotels WHERE costo<'valor'")
+      while (hotels.next) {
+        hoteles += hotels.getString("name")
+
+      }
+    } finally {
+      conn.close()
+    }
+
+
     Ok(views.html.menor(null))
   }
   def hotelData = Action { request =>
