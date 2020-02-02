@@ -1,3 +1,5 @@
+// To see the properties of Reservation
+
 package models
 
 import play.api.data.Form

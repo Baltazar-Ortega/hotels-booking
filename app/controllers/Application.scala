@@ -7,6 +7,8 @@ import play.api.Play.current
 
 import play.api.db._
 
+import scala.collection.mutable.ArrayBuffer
+
 object Application extends Controller {
 
 
@@ -19,9 +21,34 @@ object Application extends Controller {
   def configuracion = Action {
     Ok(views.html.configuracion(null))
   }
+
   def todo = Action {
-    Ok(views.html.todo(null))
+    var out = ""
+    // Creating array buffer
+    var hotels =  ArrayBuffer[String]()
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      //stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
+      //stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
+
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      val hotelsDB = stmt.executeQuery("SELECT name FROM hotels")
+
+      while (hotelsDB.next) {
+        hotels += hotelsDB.getString("name")
+        //out += "Read from DB: " + hotelsDB.getString("name") + "\n"
+
+      }
+    } finally {
+    conn.close()
+    }
+    //print(out + "\n\n")
+    print(hotels(0))
+    Ok(views.html.todo(hotels))
   }
+
   def estrellas = Action {
     Ok(views.html.estrellas(null))
   }

@@ -3,31 +3,31 @@
 
 @main("travelcheap") {
     <script>
-            def db = Action {
-                var out =0
-                val conn = DB.getConnection()
-                try {
-                    val stmt = conn.createStatement
+            // def db = Action {
+            //     var out =0
+            //     val conn = DB.getConnection()
+            //     try {
+            //         val stmt = conn.createStatement
 
-                    stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
-                    stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
+            //         stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
+            //         stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
 
-                    //val rs = stmt.executeQuery("SELECT tick FROM ticks")
-                    val hotels = stmt.executeQuery("SELECT costo FROM hotels")
-                      var aux=0
-                    while (hotels.next) {
+            //         //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+            //         val hotels = stmt.executeQuery("SELECT costo FROM hotels")
+            //           var aux=0
+            //         while (hotels.next) {
 
-                        out += "Read from DB: " + hotels.getInt32() + "\n"
+            //             out += "Read from DB: " + hotels.getInt32() + "\n"
 
-                        if(out==/*costo minimo*/){
-                            aux=out
-                        }
-                    }
-                } finally {
-                    conn.close()
-                }
-                Ok(out)
-            }
+            //             if(out==/*costo minimo*/){
+            //                 aux=out
+            //             }
+            //         }
+            //     } finally {
+            //         conn.close()
+            //     }
+            //     Ok(out)
+            // }
     </script>
 
 }

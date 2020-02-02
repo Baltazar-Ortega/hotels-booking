@@ -1,28 +1,19 @@
-@(message: String)
+@import scala.collection.mutable.ArrayBuffer
+
+@(hotels: ArrayBuffer[String])
 
 
 @main("travelcheap") {
 
+    <h1>All the hotels in Travel Cheap</h1>
+
+    <ul>
+        @for(h <- hotels) {
+            <li>@h</li>
+        }
+    </ul>
+
     <script>
-    def db = Action {
-    var out = ""
-    val conn = DB.getConnection()
-    try {
-    val stmt = conn.createStatement
-
-    stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
-    stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
-
-    //val rs = stmt.executeQuery("SELECT tick FROM ticks")
-    val hotels = stmt.executeQuery("SELECT name FROM hotels")
-
-    while (hotels.next) {
-    out += "Read from DB: " + hotels.getString("name") + "\n"
-    }
-    } finally {
-    conn.close()
-    }
-    Ok(out)
-    }
+    
    </script>
 }
