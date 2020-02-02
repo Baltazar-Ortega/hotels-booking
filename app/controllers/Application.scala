@@ -13,7 +13,24 @@ object Application extends Controller {
   def hotel1 = Action {
     Ok(views.html.hotel1(null))
   }
-  
+  def admin = Action {
+    Ok(views.html.admin(null))
+  }
+  def configuracion = Action {
+    Ok(views.html.configuracion(null))
+  }
+  def todo = Action {
+    Ok(views.html.todo(null))
+  }
+  def estrellas = Action {
+    Ok(views.html.estrellas(null))
+  }
+  def reservacion = Action {
+    Ok(views.html.reservacion(null))
+  }
+  def menor = Action {
+    Ok(views.html.menor(null))
+  }
   def hotelData = Action { request =>
     // print(request.body)
     // print(request.body.asFormUrlEncoded)

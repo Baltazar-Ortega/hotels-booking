@@ -3,9 +3,15 @@
 # ~~~~
 
 # Home page
+GET     /todo               controllers.Application.todo
+GET     /reservacion                controllers.Application.reservacion
+GET     /menor                controllers.Application.menor
+GET     /estrellas                controllers.Application.estrellas
+GET     /configuracion                controllers.Application.configuracion
 GET     /                           controllers.Application.index
 GET     /db                         controllers.Application.db
 GET     /hotel1                      controllers.Application.hotel1
+GET     /admin                      controllers.Application.admin
 POST     /hotelPost                controllers.Application.hotelData
 
 
