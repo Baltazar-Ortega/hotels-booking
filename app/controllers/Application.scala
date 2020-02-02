@@ -35,6 +35,7 @@ object Application extends Controller {
 
       
     } finally {
+      print("Connection closed")
       conn.close()
     }
     Ok(views.html.index(null)) // Automatic Redirection doesnt work
@@ -64,6 +65,7 @@ object Application extends Controller {
       conn.close()
     }
     Ok(out)
+    
   }
 
 }
