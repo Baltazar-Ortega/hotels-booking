@@ -1,15 +1,43 @@
-@import helper._
+@(message: String)
 
-@(userForm: Form[BasicForm])(implicit messages: Messages)
+@main("Silver Hotel") {
+    <div class="container">
+        <script>
+                var a = prompt('Name: ')
+                console.log(a)
+                var b = prompt('email')
+                console.log(b)
+                var c = prompt('Adults: ')
+                console.log(c)
+                var d = prompt('Children or elderly: ')
+                console.log(d)
+                //var e = prompt('Spa: ')
+                console.log(0)
+                //var f = prompt('Gym: ')
+                console.log(0)
+                var g = prompt('Arrival day: ')
+                console.log(g)
+                var h = prompt('Day of exit: ')
+                console.log(h)
+                var i = prompt('Floor (1 - 3): ')
+                console.log(i)
+                var j;
+                if (confirm("Are you a FCFM student?: ")) {
+                    j =true;
+                } else {
+                    j =false;
+                }
+                console.log(j)
+                var k = prompt('Total = ')
+                console.log(k)
+                var linea = a + ',' + b + ',' + c + ',' + d + ',' + 0 + ',' + 0 + ',' + g + ',' + h + ',' + i + ',' + j + ',' + k
+                console.log(linea)
+                var oReq = new XMLHttpRequest()
+                oReq.open("post", `http://localhost:9000/hotelPost`, true);
+                oReq.send(linea)
+        </script>
 
-@main("Scala Play forms tutorial") {
-    <h1>Scala Play forms tutorial</h1>
+        <h1>Reservation</h1>
 
-
-    @form(action = routes.BasicController.simpleFormPost()) {
-        @inputText(userForm("name"))
-        @inputText(userForm("age"))
-
-        <input type="submit" value="Submit">
-    }
+    </div>
 }
