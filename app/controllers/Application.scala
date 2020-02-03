@@ -113,6 +113,14 @@ object Application extends Controller {
 
     Ok(views.html.menor(null))
   }
+
+  def pruebas = Action { request => 
+    val resRaw = request.body.asText.toString()
+    println(resRaw)
+    Ok(views.html.index(null)) // Automatic Redirection doesnt work
+    
+  }
+
   def hotelData = Action { request =>
     // print(request.body)
     // print(request.body.asFormUrlEncoded)

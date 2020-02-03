@@ -14,6 +14,7 @@ GET     /hotel1                      controllers.Application.hotel1
 GET     /hotel3                      controllers.Application.hotel3
 GET     /admin                      controllers.Application.admin
 POST     /hotelPost                controllers.Application.hotelData
+POST     /pruebas         controllers.Application.pruebas
 
 
 # Map static resources from the /public folder to the /assets URL path
