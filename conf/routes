@@ -11,9 +11,11 @@ GET     /configuracion                controllers.Application.configuracion
 GET     /                           controllers.Application.index
 GET     /db                         controllers.Application.db
 GET     /hotel1                      controllers.Application.hotel1
+GET     /hotel2                      controllers.Application.hotel2
 GET     /hotel3                      controllers.Application.hotel3
 GET     /admin                      controllers.Application.admin
 
+POST     /hotel2Post               controllers.Application.hotel2Post
 POST     /hotel3Post                controllers.Application.hotel3Post
 
 

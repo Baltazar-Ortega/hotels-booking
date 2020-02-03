@@ -1,0 +1,23 @@
+@(message: String)
+
+@import helper._
+
+@main("Cancun Hotel") {
+
+    <div class="container">
+  <h1>Testing the Forms</h1>
+  @form(action = routes.Application.hotel2Post()) {
+    <div class="form-group">
+        <label for="exampleInputEmail1">Name</label>
+        <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter name">
+      </div>
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" placeholder="Age">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  }
+</div>
+
+
+}

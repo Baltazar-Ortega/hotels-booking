@@ -11,13 +11,79 @@ import scala.collection.mutable.ArrayBuffer
 
 object Application extends Controller {
 
+  def index = Action {
+    Ok(views.html.index(null))
+  }
+
 
   def hotel1 = Action {
     Ok(views.html.hotel1(null))
   }
+
+  def hotel2 = Action {
+    Ok(views.html.hotel2(null))
+  }
+
+  def hotel2Post = Action { request: Request[AnyContent] =>
+    val body: AnyContent = request.body
+    val formBody = body.asFormUrlEncoded
+
+    // Seq: trait that represents indexed sequences (defined order) that are immutable
+    // Map: collection of key-value pairs
+    val pairs: Seq[String] = { // List
+          formBody map {
+              params: Map[String, Seq[String]] => {
+                for ((key: String, value: Seq[String]) <- params) yield value.mkString
+              }.toSeq
+          }
+      }.getOrElse(Seq.empty[String])
+
+    println(pairs)
+    println(pairs(0))
+    Ok(views.html.index(null))
+  }
+
   def hotel3 = Action {
     Ok(views.html.hotel3(null))
   }
+
+  def hotel3Post = Action { request =>
+  
+    val resRaw = request.body.asText.toString()
+
+    val res = resRaw.replaceAll("Some", "")
+    val resNoIzq = res.replace("(", "")
+    val newRes = resNoIzq.replace(")", "")
+    // println("Esto es: " + newRes)
+    val arrayRes = newRes.split(",")
+
+    var str = "" 
+
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+      str = "INSERT INTO reservations VALUES ('" + arrayRes(0) + "','" +
+                    arrayRes(1)+"'," + arrayRes(2) +","+ arrayRes(3) + ","+
+                    arrayRes(4) +","+ arrayRes(5) + ","+ arrayRes(6) +","+ arrayRes(7) + ","+
+                    arrayRes(8) +","+
+                     arrayRes(9) + ","+
+                     arrayRes(10) +","+
+                     arrayRes(11) + ")"
+
+
+      print("STR: " + str)
+      stmt.executeUpdate(str)
+
+      
+    } finally {
+      print("Connection closed")
+      conn.close()
+    }
+
+    Ok(views.html.index(null)) 
+    
+  }
+
   def admin = Action {
     Ok(views.html.admin(null))
   }
@@ -114,47 +180,9 @@ object Application extends Controller {
     Ok(views.html.menor(null))
   }
 
-  def hotel3Post = Action { request =>
   
-    val resRaw = request.body.asText.toString()
 
-    val res = resRaw.replaceAll("Some", "")
-    val resNoIzq = res.replace("(", "")
-    val newRes = resNoIzq.replace(")", "")
-    // println("Esto es: " + newRes)
-    val arrayRes = newRes.split(",")
-
-    var str = "" 
-
-    val conn = DB.getConnection()
-    try {
-      val stmt = conn.createStatement
-      str = "INSERT INTO reservations VALUES ('" + arrayRes(0) + "','" +
-                    arrayRes(1)+"'," + arrayRes(2) +","+ arrayRes(3) + ","+
-                    arrayRes(4) +","+ arrayRes(5) + ","+ arrayRes(6) +","+ arrayRes(7) + ","+
-                    arrayRes(8) +","+
-                     arrayRes(9) + ","+
-                     arrayRes(10) +","+
-                     arrayRes(11) + ")"
-
-
-      print("STR: " + str)
-      stmt.executeUpdate(str)
-
-      
-    } finally {
-      print("Connection closed")
-      conn.close()
-    }
-
-    Ok(views.html.index(null)) 
-    
-  }
-
-  def index = Action {
-    Ok(views.html.index(null))
-  }
-
+  
   def db = Action {
     var out = ""
     val conn = DB.getConnection()
