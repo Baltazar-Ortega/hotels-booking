@@ -114,29 +114,30 @@ object Application extends Controller {
     Ok(views.html.menor(null))
   }
 
-  def pruebas = Action { request => 
+  def hotel3Post = Action { request =>
+  
     val resRaw = request.body.asText.toString()
-    println(resRaw)
-    Ok(views.html.index(null)) // Automatic Redirection doesnt work
-    
-  }
 
-  def hotelData = Action { request =>
-    // print(request.body)
-    // print(request.body.asFormUrlEncoded)
-    val resRaw = request.body.asText.toString()
     val res = resRaw.replaceAll("Some", "")
     val resNoIzq = res.replace("(", "")
     val newRes = resNoIzq.replace(")", "")
-    println("Esto es: " + newRes)
+    // println("Esto es: " + newRes)
     val arrayRes = newRes.split(",")
 
     var str = "" 
+
     val conn = DB.getConnection()
     try {
       val stmt = conn.createStatement
+      str = "INSERT INTO reservations VALUES ('" + arrayRes(0) + "','" +
+                    arrayRes(1)+"'," + arrayRes(2) +","+ arrayRes(3) + ","+
+                    arrayRes(4) +","+ arrayRes(5) + ","+ arrayRes(6) +","+ arrayRes(7) + ","+
+                    arrayRes(8) +","+
+                     arrayRes(9) + ","+
+                     arrayRes(10) +","+
+                     arrayRes(11) + ")"
 
-      str = "INSERT INTO hotels(name, city) VALUES ('" + arrayRes(0) + "','"+arrayRes(1)+"')"
+
       print("STR: " + str)
       stmt.executeUpdate(str)
 
@@ -145,7 +146,8 @@ object Application extends Controller {
       print("Connection closed")
       conn.close()
     }
-    Ok(views.html.index(null)) // Automatic Redirection doesnt work
+
+    Ok(views.html.index(null)) 
     
   }
 

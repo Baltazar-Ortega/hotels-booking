@@ -6,30 +6,160 @@
 
     
     <script>
+
+
         async function getValues(){
+            var reservationData = []
+
             const { value: name } = await Swal.fire({
-                    title: 'Enter name',
-                    input: 'text',
-                    inputValue: "",
-                    showCancelButton: true,
-                    inputValidator: (value) => {
-                        if (!value) {
-                        return 'You need to write something!'
-                        }
+                title: 'Enter name',
+                input: 'text',
+                inputValue: "",
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                    return 'You need to write something!'
                     }
+                }
             })
-            console.log(name)
+            reservationData.push(name)
             const { value: email } = await Swal.fire({
                 title: 'Input email address',
                 input: 'email',
                 inputPlaceholder: 'Enter your email address'
             })
+            reservationData.push(email)
             const { value: phone } = await Swal.fire({
-            title: 'Phone number',
-            input: 'number',
-            inputPlaceholder: 'Enter your phone number'
+                title: 'Phone number',
+                input: 'number',
+                inputPlaceholder: 'Enter your phone number'
+            })
+            reservationData.push(phone)
+            const { value: amountAdults } = await Swal.fire({
+                title: 'Number of adults',
+                input: 'number',
+                inputPlaceholder: ''
+            })
+            reservationData.push(amountAdults)
+            const { value: amountOthers } = await Swal.fire({
+                title: 'Number of children or elders',
+                input: 'number',
+                inputPlaceholder: ''
+            })
+            reservationData.push(amountOthers)
+
+            // inputOptions can be an object or Promise
+            const inputOptions = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    1: "Yes",
+                    0: "No"
+                    })
+                }, 1000)
             })
 
+            const inputOptionsBool = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    1: "Yes",
+                    0: "No"
+                    })
+                }, 1000)
+            })
+
+            const {value: spa} = await Swal.fire({
+            title: 'Spa',
+            input: 'radio',
+            inputOptions: inputOptions,
+            inputValidator: (value) => {
+                return !value && 'You need to choose something!'
+            }
+            })
+            console.log(spa) // 0 or 1
+            reservationData.push(spa)
+
+            const {value: gym} = await Swal.fire({
+            title: 'Gym',
+            input: 'radio',
+            inputOptions: inputOptions,
+            inputValidator: (value) => {
+                return !value && 'You need to choose something!'
+            }
+            })
+            reservationData.push(gym)
+
+            const {value: floor} = await Swal.fire({
+                title: 'Floor',
+                input: 'select',
+                inputOptions: {
+                    1: '1',
+                    2: '2',
+                    3: '3'
+                },
+                inputPlaceholder: 'Select a floor',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                   return !value && 'You need to choose something!'
+               }
+            })
+            reservationData.push(floor)
+
+            const {value: month} = await Swal.fire({
+                title: 'Month',
+                input: 'select',
+                inputOptions: {
+                    1: 'January',
+                    2: 'February',
+                    3: 'March'
+                },
+                inputPlaceholder: 'Select a month',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                   return !value && 'You need to choose something!'
+               }
+            })
+            reservationData.push(month)
+
+            const { value: dayIn } = await Swal.fire({
+                title: 'Day of the month',
+                input: 'range',
+                inputPlaceholder: '',
+                inputAttributes: {
+                    min: 1,
+                    max: 31,
+                    step: 1
+                },
+                inputValue: 1
+            })
+            reservationData.push(dayIn)
+
+            const { value: nights } = await Swal.fire({
+                title: 'How many nights?',
+                input: 'number',
+                inputPlaceholder: '',
+                inputValidator: (value) => {
+                    return !value && 'You need specify the amount of nights'
+                }
+            })
+            reservationData.push(nights)
+
+            const {value: fcfm} = await Swal.fire({
+                title: 'Are you a student from FCFM?',
+                input: 'radio',
+                inputOptions: inputOptions,
+                inputValidator: (value) => {
+                    return !value && 'You need to choose something!'
+                }
+            })
+            reservationData.push(fcfm)
+            console.log(reservationData)
+            var reservationDataString = reservationData.join(",")
+            console.log(reservationDataString)
+
+            // POST to backend - Send data to backend in form of a string
+            var oReq = new XMLHttpRequest()
+            oReq.open("post", `http://localhost:9000/hotel3Post`, true);
+            oReq.send(reservationDataString)
 
         }
         getValues()
