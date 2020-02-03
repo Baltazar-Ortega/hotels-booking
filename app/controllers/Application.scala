@@ -15,22 +15,119 @@ object Application extends Controller {
     Ok(views.html.index(null))
   }
 
-
   def hotel1 = Action {
-    Ok(views.html.hotel1(null))
+    Ok(views.html.hotelForm("Silver Hotel - Vallarta")(1))
   }
 
   def hotel2 = Action {
-    Ok(views.html.hotel2(null))
+    Ok(views.html.hotelForm("Temptation Hotel - Cancun")(2))
   }
 
-  def hotel2Post = Action { request: Request[AnyContent] =>
+  def hotel3 = Action {
+    Ok(views.html.hotelForm("Hyatt Ziva - Los Cabos")(3))
+  }
+
+  def totalOperation(hotelNumber:Int, nights:Int, amountAdults:Int, amountOthers:Int, floor:Int, spa:Int, gym:Int, fcfm:Int):Int = {
+    // println("Inside function totalOperation")
+    var total = 0
+    if (hotelNumber == 1) {
+      if (spa == 1){
+        total = total + 50
+      }
+      if (gym == 1){
+        total = total + 50
+      }
+      if (floor == 1){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 1200)
+        }
+      } else if (floor == 2){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 1700)
+        }
+      } else {
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 2700)
+        }
+      }
+      if (amountOthers != 0) {
+        total = total + (amountOthers * nights * 800)
+      }
+      if (fcfm == 1) {
+        var rest = total.toDouble * .1
+        total = total - rest.toInt
+      }
+    }
+
+    if (hotelNumber == 2) {
+      if (spa == 1){
+        total = total + 300
+      }
+      if (gym == 1){
+        total = total + 300
+      }
+      if (floor == 1){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 4000)
+        }
+      } else if (floor == 2){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 4500)
+        }
+      } else {
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 6000)
+        }
+      }
+      if (amountOthers != 0) {
+        total = total + (amountOthers * nights * 3800)
+      }
+      if (fcfm == 1) {
+        var rest = total.toDouble * .5
+        total = total - rest.toInt
+      }
+    }
+
+    if (hotelNumber == 3) {
+      if (spa == 1){
+        total = total + 700
+      }
+      if (gym == 1){
+        total = total + 700
+      }
+      if (floor == 1){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 7000)
+        }
+      } else if (floor == 2){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 7500)
+        }
+      } else {
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * 8500)
+        }
+      }
+      if (amountOthers != 0) {
+        total = total + (amountOthers * nights * 6000)
+      }
+      if (fcfm == 1) {
+        var rest = total.toDouble * .9
+        total = total - rest.toInt
+      }
+    }
+
+    print("TOTAL = " + total)
+    return total
+  }
+
+  def hotelPost(hotelNumber:Int) = Action { request: Request[AnyContent] =>
     val body: AnyContent = request.body
     val formBody = body.asFormUrlEncoded
 
     // Seq: trait that represents indexed sequences (defined order) that are immutable
     // Map: collection of key-value pairs
-    val pairs: Seq[String] = { // List
+    val values: Seq[String] = { // List
           formBody map {
               params: Map[String, Seq[String]] => {
                 for ((key: String, value: Seq[String]) <- params) yield value.mkString
@@ -38,14 +135,21 @@ object Application extends Controller {
           }
       }.getOrElse(Seq.empty[String])
 
-    println(pairs)
-    println(pairs(0))
-    Ok(views.html.index(null))
+    println(values)
+    println("Hotel number: " + hotelNumber)
+
+    val nights = values(10).toInt
+    val amountAdults = values(3).toInt 
+    val amountOthers = values(4).toInt  
+    val floor = values(7).toInt
+    val spa = values(5).toInt
+    val gym = values(6).toInt 
+    val fcfm = values(11).toInt
+    val total: Int = Application.totalOperation(hotelNumber, nights, amountAdults, amountOthers, floor, spa, gym, fcfm)
+    Ok(views.html.result(total))
   }
 
-  def hotel3 = Action {
-    Ok(views.html.hotel3(null))
-  }
+  
 
   def hotel3Post = Action { request =>
   

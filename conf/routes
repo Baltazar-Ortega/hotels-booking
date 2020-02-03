@@ -15,7 +15,7 @@ GET     /hotel2                      controllers.Application.hotel2
 GET     /hotel3                      controllers.Application.hotel3
 GET     /admin                      controllers.Application.admin
 
-POST     /hotel2Post               controllers.Application.hotel2Post
+POST     /hotelPost               controllers.Application.hotelPost(hotelNumber:Int)
 POST     /hotel3Post                controllers.Application.hotel3Post
 
 
