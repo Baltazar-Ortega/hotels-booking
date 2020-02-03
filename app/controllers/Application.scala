@@ -10,6 +10,7 @@ import play.api.db._
 import scala.collection.mutable.ArrayBuffer
 
 object Application extends Controller {
+  
 
   def index = Action {
     Ok(views.html.index(null))
@@ -117,7 +118,7 @@ object Application extends Controller {
       }
     }
 
-    print("TOTAL = " + total)
+    println("TOTAL = " + total)
     return total
   }
 
@@ -145,34 +146,38 @@ object Application extends Controller {
     val spa = values(5).toInt
     val gym = values(6).toInt 
     val fcfm = values(11).toInt
+
     val total: Int = Application.totalOperation(hotelNumber, nights, amountAdults, amountOthers, floor, spa, gym, fcfm)
-    Ok(views.html.result(total))
+    
+    var hotelName = ""
+    if(hotelNumber == 1){
+      hotelName = "Silver Hotel - Vallarta"
+    } else if(hotelNumber == 2){
+      hotelName = "Temptation Hotel - Cancun"
+    } else {
+      hotelName = "Hyatt Ziva - Los Cabos"
+    }
+
+    var hotelUrl = "hotel" + hotelNumber.toString
+
+    Ok(views.html.result(total)(values)(hotelName)(hotelUrl))
   }
 
-  
-
-  def hotel3Post = Action { request =>
-  
-    val resRaw = request.body.asText.toString()
-
-    val res = resRaw.replaceAll("Some", "")
-    val resNoIzq = res.replace("(", "")
-    val newRes = resNoIzq.replace(")", "")
-    // println("Esto es: " + newRes)
-    val arrayRes = newRes.split(",")
+  def reservationToDB(values: Seq[String]) = Action { request: Request[AnyContent] =>
+    println("In reservation to DB")
 
     var str = "" 
 
     val conn = DB.getConnection()
     try {
       val stmt = conn.createStatement
-      str = "INSERT INTO reservations VALUES ('" + arrayRes(0) + "','" +
-                    arrayRes(1)+"'," + arrayRes(2) +","+ arrayRes(3) + ","+
-                    arrayRes(4) +","+ arrayRes(5) + ","+ arrayRes(6) +","+ arrayRes(7) + ","+
-                    arrayRes(8) +","+
-                     arrayRes(9) + ","+
-                     arrayRes(10) +","+
-                     arrayRes(11) + ")"
+      str = "INSERT INTO reservations VALUES ('" + values(0) + "','" +
+                    values(1)+"'," + values(2) +","+ values(3) + ","+
+                    values(4) +","+ values(5) + ","+ values(6) +","+ values(7) + ","+
+                    values(8) +","+
+                     values(9) + ","+
+                     values(10) +","+
+                     values(11) + ")"
 
 
       print("STR: " + str)
@@ -180,13 +185,13 @@ object Application extends Controller {
 
       
     } finally {
-      print("Connection closed")
+      println("Connection closed")
       conn.close()
     }
 
-    Ok(views.html.index(null)) 
-    
-  }
+    Ok(views.html.index(null))
+  } 
+
 
   def admin = Action {
     Ok(views.html.admin(null))

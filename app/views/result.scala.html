@@ -1,6 +1,36 @@
-@(total: Int)
+@(total: Int)(values: Seq[String])(hotelName:String)(hotelUrl:String)
 
-@main("Total a pagar") {
-    <h1>Pagarias @total</h1>
-    <button class="btn btn-primary">Confirmar</button>
+@import helper._
+
+@main("Total to pay") {
+
+    <div class="container">
+        <h1 class="display-3">Total: $@total</h1>
+
+        <h2 class="display-3">Hotel: @hotelName</h2>
+
+        <p class="display-4">Nights: @values(10)</p>
+        <p class="display-4">Adults: @values(3)</p>
+        <p class="display-4">Children or Elder: @values(4)</p>
+        <p class="display-4">Floor: @values(7)</p>
+
+        @if(values(5).toInt == 1){
+            <p>Spa Included</p>
+        }
+        @if(values(6).toInt == 1){
+            <p>Gym Included</p>
+        }
+
+        <a href="@{hotelUrl}" class="btn btn-danger btn-lg">Return</a>
+        
+        <div class="mt-5">
+            @form(action = routes.Application.reservationToDB(values)) {
+                <button class="btn btn-primary btn-lg" type="submit">
+                    Confirm
+                </button>
+            }
+        </div>
+        
+    </div>
+    
 }
