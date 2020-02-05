@@ -21,6 +21,72 @@ object Application extends Controller {
     Ok(views.html.hotelForm("Hyatt Ziva - Los Cabos")(3))
   }
 
+  def reservationUpdateForm(phone: Int) = Action {
+    Ok(views.html.reservationUpdateForm(phone))
+  }
+
+  def reservationUpdate(phone: Int) = Action { request: Request[AnyContent] =>
+    val body: AnyContent = request.body
+    val formBody = body.asFormUrlEncoded
+
+    // Seq: trait that represents indexed sequences (defined order) that are immutable
+    // Map: collection of key-value pairs
+    val values: Seq[String] = { // List
+          formBody map {
+              params: Map[String, Seq[String]] => {
+                for ((key: String, value: Seq[String]) <- params) yield value.mkString
+              }.toSeq
+          }
+      }.getOrElse(Seq.empty[String])
+
+    println(values)
+
+    val name = values(0)
+    val email = values(1)
+    val originalPhone = values(2).toInt
+    val nights = values(10).toInt
+    val month = values(8).toInt
+    val dayIn = values(9).toInt
+    val amountAdults = values(3).toInt
+    val amountOthers = values(4).toInt
+    val floor = values(7).toInt
+    val spa = values(5).toInt
+    val gym = values(6).toInt
+    val fcfm = values(11).toInt
+
+
+    println("In update to DB")
+
+
+
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      var str = ""
+      str = "UPDATE public.reservations set name='"+name+
+            "', email='"+email+"', phone="+originalPhone+","+
+            """ "amountAdults"=  """+amountAdults+
+            """, "amountOthers"=  """+amountOthers+
+            ", spa="+spa+
+            ", gym="+gym+", floor="+floor+", month="+month+
+            """, "dayIn"=  """+dayIn+", nights="+nights+
+            " WHERE phone = " + phone
+
+
+      print("STR: " + str)
+
+      stmt.executeUpdate(str)
+
+
+    } finally {
+      println("Connection closed")
+      conn.close()
+    }
+
+    Ok(views.html.index(null))
+  }
+
   def searchReservation(action: Int) = Action {
     Ok(views.html.searchReservation("Search Reservation")(action))
   }
@@ -293,10 +359,7 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-      //stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
-      //stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
 
-      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
       val hotelsDB = stmt.executeQuery("SELECT name, email, phone, adults, others, spa, gym, floor, month , day, nights, fcfm, total FROM reservations")
 
       while (hotelsDB.next) {

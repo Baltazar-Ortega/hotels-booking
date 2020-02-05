@@ -8,7 +8,7 @@ GET     /db                         controllers.Application.db
 GET     /hotel1                      controllers.Application.hotel1
 GET     /hotel2                      controllers.Application.hotel2
 GET     /hotel3                      controllers.Application.hotel3
-
+GET     /reservationUpdateForm/:phone    controllers.Application.reservationUpdateForm(phone: Int)
 
 POST     /reservationToDB        controllers.Application.reservationToDB(values: Seq[String])
 POST     /hotelPost               controllers.Application.hotelPost(hotelNumber:Int)
@@ -20,6 +20,8 @@ POST     /deleteX                controllers.Application.deleteX
 
 GET     /searchReservation/:action          controllers.Application.searchReservation(action:Int)
 POST     /searchReservationForm     controllers.Application.searchReservationForm(action:Int)
+
+POST     /reservationUpdate               controllers.Application.reservationUpdate(phone:Int)
 
 GET     /all                      controllers.Application.allReservations
 
