@@ -4,28 +4,28 @@ import play.api._
 import play.api.mvc._
 import play.api.cache.Cache
 import play.api.Play.current
-
 import play.api.db._
-
 import scala.collection.mutable.ArrayBuffer
 
 object Application extends Controller {
-  
-
   def index = Action {
     Ok(views.html.index(null))
   }
-
   def hotel1 = Action {
     Ok(views.html.hotelForm("Silver Hotel - Vallarta")(1))
   }
-
   def hotel2 = Action {
     Ok(views.html.hotelForm("Temptation Hotel - Cancun")(2))
   }
-
   def hotel3 = Action {
     Ok(views.html.hotelForm("Hyatt Ziva - Los Cabos")(3))
+  }
+
+  def admin = Action {
+    Ok(views.html.admin(null))
+  }
+  def deleteRes = Action {
+    Ok(views.html.deleteRes(null))
   }
 
   def totalOperation(hotelNumber:Int, nights:Int, amountAdults:Int, amountOthers:Int, floor:Int, spa:Int, gym:Int, fcfm:Int):Int = {
@@ -140,15 +140,15 @@ object Application extends Controller {
     println("Hotel number: " + hotelNumber)
 
     val nights = values(10).toInt
-    val amountAdults = values(3).toInt 
-    val amountOthers = values(4).toInt  
+    val amountAdults = values(3).toInt
+    val amountOthers = values(4).toInt
     val floor = values(7).toInt
     val spa = values(5).toInt
-    val gym = values(6).toInt 
+    val gym = values(6).toInt
     val fcfm = values(11).toInt
 
     val total: Int = Application.totalOperation(hotelNumber, nights, amountAdults, amountOthers, floor, spa, gym, fcfm)
-    
+
     var hotelName = ""
     if(hotelNumber == 1){
       hotelName = "Silver Hotel - Vallarta"
@@ -193,17 +193,60 @@ object Application extends Controller {
   } 
 
 
-  def admin = Action {
+
+/////////////////////////////////////////////////////////////////////////////////
+
+  def deleteX() = Action { request: Request[AnyContent] =>
+    val body: AnyContent = request.body
+    val formBodyDelete = body.asFormUrlEncoded
+
+    // Seq: trait that represents indexed sequences (defined order) that are immutable
+    // Map: collection of key-value pairs
+    val dato: Seq[String] = {
+      formBodyDelete map {
+        params: Map[String, Seq[String]] => {
+          for ((key: String, value: Seq[String]) <- params) yield value.mkString
+          }.toSeq
+      }
+      }.getOrElse(Seq.empty[String])
+
+    println(dato)
+
+    val phone = dato(0)
+    var out = ""
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
+      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
+
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      stmt.execute("DELETE FROM reservations WHERE phone ="+ phone +"")
+    } finally {
+      conn.close()
+    }
+    //println(phone)
     Ok(views.html.admin(null))
   }
-  def configuracion = Action {
-    Ok(views.html.configuracion(null))
-  }
 
-  def todo = Action {
+  def allReservations = Action {
     var out = ""
     // Creating array buffer
-    var hotels =  ArrayBuffer[String]()
+    var names =  ArrayBuffer[String]()
+    var phones =  ArrayBuffer[String]()
+    var emails =  ArrayBuffer[String]()
+    var adults =  ArrayBuffer[String]()
+    var others =  ArrayBuffer[String]()
+    var spas =  ArrayBuffer[String]()
+    var gyms =  ArrayBuffer[String]()
+    var floors =  ArrayBuffer[String]()
+    var months =  ArrayBuffer[String]()
+    var days =  ArrayBuffer[String]()
+    var nights =  ArrayBuffer[String]()
+    var fcfms =  ArrayBuffer[String]()
+    var totals =  ArrayBuffer[String]()
+
     val conn = DB.getConnection()
     try {
       val stmt = conn.createStatement
@@ -212,84 +255,33 @@ object Application extends Controller {
       //stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
 
       //val rs = stmt.executeQuery("SELECT tick FROM ticks")
-      val hotelsDB = stmt.executeQuery("SELECT name FROM hotels")
+      val hotelsDB = stmt.executeQuery("SELECT name, email, phone, adults, others, spa, gym, floor, month , day, nights, fcfm, total FROM reservations")
 
       while (hotelsDB.next) {
-        hotels += hotelsDB.getString("name")
+        names += hotelsDB.getString("name")
+        emails += hotelsDB.getString("email")
+        phones += hotelsDB.getString("phone")
+        adults += hotelsDB.getString("adults")
+        others += hotelsDB.getString("others")
+        spas += hotelsDB.getString("spa")
+        gyms += hotelsDB.getString("gym")
+        floors += hotelsDB.getString("floor")
+        months += hotelsDB.getString("month")
+        days += hotelsDB.getString("day")
+        nights += hotelsDB.getString("nights")
+        fcfms += hotelsDB.getString("fcfm")
+        totals += hotelsDB.getString("total")
+
         //out += "Read from DB: " + hotelsDB.getString("name") + "\n"
 
       }
     } finally {
-    conn.close()
-    }
-    //print(out + "\n\n")
-    print(hotels(0))
-    Ok(views.html.todo(hotels))
-  }
-
-  def estrellas = Action { request=>
-    val valor=  request.body.asText.toString()
-    var hotels =  ArrayBuffer[String]()
-    val conn = DB.getConnection()
-    try {
-      val stmt = conn.createStatement
-
-      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
-      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
-
-      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
-      val hotelsDB = stmt.executeQuery("SELECT name  FROM hotels WHERE estrellas='valor'")
-      while (hotelsDB.next) {
-        hotels += hotelsDB.getString("name")
-      }
-    } finally {
       conn.close()
     }
 
-    Ok(views.html.estrellas(null))
-  }
-  def reservacion = Action {
-    var out = ""
-    val conn = DB.getConnection()
-    try {
-      val stmt = conn.createStatement
-
-      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
-      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
-
-      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
-      val hotels = stmt.executeQuery("DELETE * FROM reservaciones")
-    } finally {
-      conn.close()
-    }
-
-    Ok(views.html.reservacion(null))
-  }
-  def menor () = Action { request =>
-    val valor=  request.body.asText.toString()
-    var hoteles =  ArrayBuffer[String]()
-    val conn = DB.getConnection()
-    try {
-      val stmt = conn.createStatement
-
-      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)")
-      stmt.executeUpdate("INSERT INTO ticks VALUES (now())")
-
-      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
-      val hotels = stmt.executeQuery("SELECT name  FROM hotels WHERE costo<'valor'")
-      while (hotels.next) {
-        hoteles += hotels.getString("name")
-
-      }
-    } finally {
-      conn.close()
-    }
-
-
-    Ok(views.html.menor(null))
+    Ok(views.html.seeAll(names)(emails)(phones)(adults)(others)(spas)(gyms)(floors)(months)(days)(nights)(fcfms)(totals))
   }
 
-  
 
   
   def db = Action {
@@ -311,7 +303,6 @@ object Application extends Controller {
       conn.close()
     }
     Ok(out)
-    
   }
 
 }

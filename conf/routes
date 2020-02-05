@@ -3,20 +3,21 @@
 # ~~~~
 
 # Home page
-GET     /todo               controllers.Application.todo
-GET     /reservacion                controllers.Application.reservacion
-GET     /menor                controllers.Application.menor
-GET     /estrellas                controllers.Application.estrellas
-GET     /configuracion                controllers.Application.configuracion
 GET     /                           controllers.Application.index
 GET     /db                         controllers.Application.db
 GET     /hotel1                      controllers.Application.hotel1
 GET     /hotel2                      controllers.Application.hotel2
 GET     /hotel3                      controllers.Application.hotel3
-GET     /admin                      controllers.Application.admin
 
 POST     /reservationToDB        controllers.Application.reservationToDB(values: Seq[String])
 POST     /hotelPost               controllers.Application.hotelPost(hotelNumber:Int)
+
+GET     /admin                      controllers.Application.admin
+
+GET     /deleteRes                controllers.Application.deleteRes
+POST     /deleteX                controllers.Application.deleteX
+
+GET     /all                      controllers.Application.allReservations
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
