@@ -9,6 +9,7 @@ GET     /hotel1                      controllers.Application.hotel1
 GET     /hotel2                      controllers.Application.hotel2
 GET     /hotel3                      controllers.Application.hotel3
 
+
 POST     /reservationToDB        controllers.Application.reservationToDB(values: Seq[String])
 POST     /hotelPost               controllers.Application.hotelPost(hotelNumber:Int)
 
@@ -16,6 +17,9 @@ GET     /admin                      controllers.Application.admin
 
 GET     /deleteRes                controllers.Application.deleteRes
 POST     /deleteX                controllers.Application.deleteX
+
+GET     /searchReservation/:action          controllers.Application.searchReservation(action:Int)
+POST     /searchReservationForm     controllers.Application.searchReservationForm(action:Int)
 
 GET     /all                      controllers.Application.allReservations
 

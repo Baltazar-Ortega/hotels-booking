@@ -1,0 +1,42 @@
+@import scala.collection.mutable.ArrayBuffer
+
+@(stringValues: ArrayBuffer[String])(numericValues: ArrayBuffer[Int])(action:Int)
+
+@import helper._
+
+@main("Reservation") {
+
+    <div class="container">
+
+      <h2>Reservation Details</h2>
+
+        <p class="display-4">Name: @stringValues(0)</p>
+        <p class="display-4">Email: @stringValues(1)</p>
+        <p class="display-4">Phone: @numericValues(0)</p>
+        <p class="display-4">Amount of Adults: @numericValues(1)</p>
+        <p class="display-4">Amount of Children/Elder: @numericValues(2)</p>
+        <p class="display-4">Floor: @numericValues(6)</p>
+        <p class="display-4">Month: @numericValues(7)</p>
+        <p class="display-4">DayIn: @numericValues(8)</p>
+        <p class="display-4">Nights: @numericValues(9)</p>
+
+        @if(numericValues(3).toInt == 1){
+            <p>Spa Included</p>
+        }
+        @if(numericValues(4).toInt == 1){
+            <p>Gym Included</p>
+        }
+        @if(numericValues(5).toInt == 1){
+            <p>FCFM discount Included</p>
+        }
+
+        @if(action == 2) {
+          <button>
+              UPDATE
+          </button>
+        }
+
+
+    </div>
+
+}

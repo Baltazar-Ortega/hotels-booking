@@ -1,0 +1,25 @@
+@(message: String)(action: Int)
+
+@import helper._
+
+@main(message) {
+
+    <div class="container">
+        <h1>@message</h1>
+
+
+        @form(action = routes.Application.searchReservationForm(action)) {
+
+            <div class="form-group">
+                <label for="Phone">Phone</label>
+                <input name="phone" type="number" class="form-control" id="Phone" placeholder="Phone">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+            </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+        }
+    </div>
+
+
+}

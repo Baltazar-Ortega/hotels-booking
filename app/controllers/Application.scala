@@ -21,6 +21,10 @@ object Application extends Controller {
     Ok(views.html.hotelForm("Hyatt Ziva - Los Cabos")(3))
   }
 
+  def searchReservation(action: Int) = Action {
+    Ok(views.html.searchReservation("Search Reservation")(action))
+  }
+
   def admin = Action {
     Ok(views.html.admin(null))
   }
@@ -28,99 +32,57 @@ object Application extends Controller {
     Ok(views.html.deleteRes(null))
   }
 
-  def totalOperation(hotelNumber:Int, nights:Int, amountAdults:Int, amountOthers:Int, floor:Int, spa:Int, gym:Int, fcfm:Int):Int = {
-    // println("Inside function totalOperation")
-    var total = 0
-    if (hotelNumber == 1) {
-      if (spa == 1){
-        total = total + 50
+  def searchReservationForm(action: Int) = Action { request: Request[AnyContent] =>
+    val body: AnyContent = request.body
+    val formBody = body.asFormUrlEncoded
+
+    val phone = formBody.get("phone")(0).toInt
+    // Application.searchReservationDB(phone)
+
+    val stringValues = ArrayBuffer[String]()
+    val numericValues = ArrayBuffer[Int]()
+
+    val conn = DB.getConnection()
+
+
+    try {
+      val stmt = conn.createStatement
+
+      val queryStr = """SELECT * FROM public.reservations WHERE "phone" = """ + phone
+      // println(queryStr)
+      //val rs = stmt.executeQuery("SELECT tick FROM ticks")
+      val reservation = stmt.executeQuery(queryStr)
+
+      while (reservation.next) {
+        val name = reservation.getString("name")
+        val email = reservation.getString("email")
+        val phone = reservation.getInt("phone")
+        val amountAdults = reservation.getInt("amountAdults")
+        val amountOthers = reservation.getInt("amountOthers")
+        val spa = reservation.getInt("spa")
+        val gym = reservation.getInt("gym")
+        val fcfm = reservation.getInt("fcfm")
+        val floor = reservation.getInt("floor")
+        val month = reservation.getInt("month")
+        val dayIn = reservation.getInt("dayIn")
+        val nights = reservation.getInt("nights")
+        stringValues ++= List(name, email)
+        numericValues ++= List(phone, amountAdults, amountOthers,
+        spa, gym, fcfm, floor, month, dayIn, nights)
+        println("In search reservation")
+        println(stringValues)
+        println(numericValues)
       }
-      if (gym == 1){
-        total = total + 50
-      }
-      if (floor == 1){
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 1200)
-        }
-      } else if (floor == 2){
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 1700)
-        }
-      } else {
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 2700)
-        }
-      }
-      if (amountOthers != 0) {
-        total = total + (amountOthers * nights * 800)
-      }
-      if (fcfm == 1) {
-        var rest = total.toDouble * .1
-        total = total - rest.toInt
-      }
+    } finally {
+      conn.close()
     }
 
-    if (hotelNumber == 2) {
-      if (spa == 1){
-        total = total + 300
-      }
-      if (gym == 1){
-        total = total + 300
-      }
-      if (floor == 1){
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 4000)
-        }
-      } else if (floor == 2){
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 4500)
-        }
-      } else {
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 6000)
-        }
-      }
-      if (amountOthers != 0) {
-        total = total + (amountOthers * nights * 3800)
-      }
-      if (fcfm == 1) {
-        var rest = total.toDouble * .5
-        total = total - rest.toInt
-      }
-    }
+    Ok(views.html.showReservation(stringValues)(numericValues)(action))
 
-    if (hotelNumber == 3) {
-      if (spa == 1){
-        total = total + 700
-      }
-      if (gym == 1){
-        total = total + 700
-      }
-      if (floor == 1){
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 7000)
-        }
-      } else if (floor == 2){
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 7500)
-        }
-      } else {
-        if (amountAdults != 0){
-          total = total + (amountAdults * nights * 8500)
-        }
-      }
-      if (amountOthers != 0) {
-        total = total + (amountOthers * nights * 6000)
-      }
-      if (fcfm == 1) {
-        var rest = total.toDouble * .9
-        total = total - rest.toInt
-      }
-    }
-
-    println("TOTAL = " + total)
-    return total
   }
+
+
+
 
   def hotelPost(hotelNumber:Int) = Action { request: Request[AnyContent] =>
     val body: AnyContent = request.body
@@ -163,10 +125,90 @@ object Application extends Controller {
     Ok(views.html.result(total)(values)(hotelName)(hotelUrl))
   }
 
+  ///////////////////////// HELPERS
+
+  def getPricesFromDB(hotelNumber: Int): ArrayBuffer[Int] = {
+    println("In getPricesFromDB")
+
+    val prices = ArrayBuffer[Int]()
+    var str = ""
+
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+      str = """SELECT "priceFloorOne", "priceFloorTwo", "priceFloorThree", gym, spa, "priceOther" FROM public.hotels WHERE "hotelNumber" = """ + hotelNumber
+      // println(str)
+      val data = stmt.executeQuery(str)
+
+      while(data.next) {
+        val priceFloorOne = data.getInt("priceFloorOne")
+        val priceFloorTwo = data.getInt("priceFloorTwo")
+        val priceFloorThree = data.getInt("priceFloorThree")
+        val priceOthers = data.getInt("priceOther")
+        val spa = data.getInt("spa")
+        val gym = data.getInt("gym")
+        prices ++= List(priceFloorOne, priceFloorTwo, priceFloorThree, priceOthers, spa, gym)
+        //println(prices)
+        return prices
+      }
+      return prices
+
+    } finally {
+      println("Connection closed")
+      conn.close()
+    }
+
+  }
+
+
+  def totalOperation(hotelNumber:Int, nights:Int, amountAdults:Int, amountOthers:Int, floor:Int, spa:Int, gym:Int, fcfm:Int):Int = {
+    // println("Inside function totalOperation")
+    val prices = Application.getPricesFromDB(hotelNumber)
+    println(prices)
+    val priceFloorOne = prices(0)
+    val priceFloorTwo = prices(1)
+    val priceFloorThree = prices(2)
+    val priceOthers = prices(3)
+    val spaPrice = prices(4)
+    val gymPrice = prices(5)
+
+    var total = 0
+
+      if (spa == 1) {
+        total = total + spaPrice
+      }
+      if (gym == 1) {
+        total = total + gymPrice
+      }
+      if (floor == 1) {
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * priceFloorOne)
+        }
+      } else if (floor == 2){
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * priceFloorTwo)
+        }
+      } else {
+        if (amountAdults != 0){
+          total = total + (amountAdults * nights * priceFloorThree)
+        }
+      }
+      if (amountOthers != 0) {
+        total = total + (amountOthers * nights * priceOthers)
+      }
+      if (fcfm == 1) {
+        var rest = total.toDouble * .1
+        total = total - rest.toInt
+      }
+
+    println("TOTAL = " + total)
+    return total
+  }
+
   def reservationToDB(values: Seq[String]) = Action { request: Request[AnyContent] =>
     println("In reservation to DB")
 
-    var str = "" 
+    var str = ""
 
     val conn = DB.getConnection()
     try {
@@ -183,14 +225,14 @@ object Application extends Controller {
       print("STR: " + str)
       stmt.executeUpdate(str)
 
-      
+
     } finally {
       println("Connection closed")
       conn.close()
     }
 
     Ok(views.html.index(null))
-  } 
+  }
 
 
 
@@ -283,7 +325,7 @@ object Application extends Controller {
   }
 
 
-  
+
   def db = Action {
     var out = ""
     val conn = DB.getConnection()
