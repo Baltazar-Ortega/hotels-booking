@@ -24,7 +24,7 @@
         <a href="@{hotelUrl}" class="btn btn-danger btn-lg">Return</a>
         
         <div class="mt-5">
-            @form(action = routes.Application.reservationToDB(values)) {
+            @form(action = routes.Application.reservationToDB(values, total, hotelName)) {
                 <button class="btn btn-primary btn-lg" type="submit">
                     Confirm
                 </button>

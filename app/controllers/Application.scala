@@ -271,7 +271,7 @@ object Application extends Controller {
     return total
   }
 
-  def reservationToDB(values: Seq[String]) = Action { request: Request[AnyContent] =>
+  def reservationToDB(values: Seq[String], total:Int, hotelName: String) = Action { request: Request[AnyContent] =>
     println("In reservation to DB")
 
     var str = ""
@@ -285,7 +285,9 @@ object Application extends Controller {
                     values(8) +","+
                      values(9) + ","+
                      values(10) +","+
-                     values(11) + ")"
+                     values(11) +","+
+                     total + ", '"+
+                     hotelName + "') "
 
 
       print("STR: " + str)
@@ -300,9 +302,6 @@ object Application extends Controller {
     Ok(views.html.index(null))
   }
 
-
-
-/////////////////////////////////////////////////////////////////////////////////
 
   def deleteX() = Action { request: Request[AnyContent] =>
     val body: AnyContent = request.body
@@ -344,38 +343,40 @@ object Application extends Controller {
     var names =  ArrayBuffer[String]()
     var phones =  ArrayBuffer[String]()
     var emails =  ArrayBuffer[String]()
-    var adults =  ArrayBuffer[String]()
-    var others =  ArrayBuffer[String]()
+    var amountAdults =  ArrayBuffer[String]()
+    var amountOthers =  ArrayBuffer[String]()
     var spas =  ArrayBuffer[String]()
     var gyms =  ArrayBuffer[String]()
     var floors =  ArrayBuffer[String]()
     var months =  ArrayBuffer[String]()
-    var days =  ArrayBuffer[String]()
+    var dayIn =  ArrayBuffer[String]()
     var nights =  ArrayBuffer[String]()
     var fcfms =  ArrayBuffer[String]()
     var totals =  ArrayBuffer[String]()
+    var hotelName =  ArrayBuffer[String]()
 
     val conn = DB.getConnection()
     try {
       val stmt = conn.createStatement
 
-
-      val hotelsDB = stmt.executeQuery("SELECT name, email, phone, adults, others, spa, gym, floor, month , day, nights, fcfm, total FROM reservations")
+      out = """ SELECT name, email, phone, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
+      val hotelsDB = stmt.executeQuery(out)
 
       while (hotelsDB.next) {
         names += hotelsDB.getString("name")
         emails += hotelsDB.getString("email")
         phones += hotelsDB.getString("phone")
-        adults += hotelsDB.getString("adults")
-        others += hotelsDB.getString("others")
+        amountAdults += hotelsDB.getString("amountAdults")
+        amountOthers += hotelsDB.getString("amountOthers")
         spas += hotelsDB.getString("spa")
         gyms += hotelsDB.getString("gym")
         floors += hotelsDB.getString("floor")
         months += hotelsDB.getString("month")
-        days += hotelsDB.getString("day")
+        dayIn += hotelsDB.getString("dayIn")
         nights += hotelsDB.getString("nights")
         fcfms += hotelsDB.getString("fcfm")
         totals += hotelsDB.getString("total")
+        hotelName += hotelsDB.getString("hotelName")
 
         //out += "Read from DB: " + hotelsDB.getString("name") + "\n"
 
@@ -384,7 +385,7 @@ object Application extends Controller {
       conn.close()
     }
 
-    Ok(views.html.seeAll(names)(emails)(phones)(adults)(others)(spas)(gyms)(floors)(months)(days)(nights)(fcfms)(totals))
+    Ok(views.html.seeAll(names)(emails)(phones)(amountAdults)(amountOthers)(spas)(gyms)(floors)(months)(dayIn)(nights)(fcfms)(totals)(hotelName))
   }
 
 

@@ -10,7 +10,7 @@ GET     /hotel2                      controllers.Application.hotel2
 GET     /hotel3                      controllers.Application.hotel3
 GET     /reservationUpdateForm/:phone    controllers.Application.reservationUpdateForm(phone: Int)
 
-POST     /reservationToDB        controllers.Application.reservationToDB(values: Seq[String])
+POST     /reservationToDB        controllers.Application.reservationToDB(values: Seq[String], total:Int, hotelName: String)
 POST     /hotelPost               controllers.Application.hotelPost(hotelNumber:Int)
 
 GET     /admin                      controllers.Application.admin

@@ -1,6 +1,6 @@
 @import scala.collection.mutable.ArrayBuffer
 
-@(names: ArrayBuffer[String])(emails: ArrayBuffer[String])(phones: ArrayBuffer[String])(adults: ArrayBuffer[String])(others: ArrayBuffer[String])(spas: ArrayBuffer[String])(gyms: ArrayBuffer[String])(floors: ArrayBuffer[String])(months: ArrayBuffer[String])(days: ArrayBuffer[String])(nights: ArrayBuffer[String])(fcfms: ArrayBuffer[String])(totals: ArrayBuffer[String])
+@(names: ArrayBuffer[String])(emails: ArrayBuffer[String])(phones: ArrayBuffer[String])(amountAdults: ArrayBuffer[String])(amountOthers: ArrayBuffer[String])(spas: ArrayBuffer[String])(gyms: ArrayBuffer[String])(floors: ArrayBuffer[String])(months: ArrayBuffer[String])(dayIn: ArrayBuffer[String])(nights: ArrayBuffer[String])(fcfms: ArrayBuffer[String])(totals: ArrayBuffer[String])(hotelName: ArrayBuffer[String])
 
 
 @main("All reservations") {
@@ -8,11 +8,14 @@
         <h1>All the reservations of Travel Cheap</h1>
         </br></br></br></br>
         <div class="row justify-content-center mb-5">
-            <ul>
+            <ul style="list-style-type: none;">
             @for(n <- names ){
                 <li>
                     <div class="card border-info mb-3" style="max-width: 50rem;">
-                        <div class="card-header"><b> Titular: @n </b></div>
+                        <div class="card-header">
+                            <b> Titular: @n </b> <br><br>
+                            <b> @hotelName(names.indexOf(n)) </b>
+                        </div>
                         <div class="card-body">
                             <p class="card-text">
                                 <table>
@@ -26,9 +29,9 @@
                                             </br></br>
                                             <b>Persons</b>
                                             <hr>
-                                            Adults: @adults(names.indexOf(n))
+                                            Adults: @amountAdults(names.indexOf(n))
                                             </br>
-                                            Others: @others(names.indexOf(n))
+                                            Others: @amountOthers(names.indexOf(n))
                                             </br></br></br></br>
                                         </td>
                                         <td>.  .  .</td>
@@ -45,7 +48,7 @@
                                             </br>
                                             Month of arrival: @months(names.indexOf(n))
                                             </br>
-                                            Day of arrival: @days(names.indexOf(n))
+                                            Day of arrival: @dayIn(names.indexOf(n))
                                             </br>
                                             Lodging nights: @nights(names.indexOf(n))
                                             </br>
