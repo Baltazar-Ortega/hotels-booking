@@ -1,0 +1,30 @@
+@import scala.collection.mutable.ArrayBuffer
+
+@(mes: ArrayBuffer[String])(income: ArrayBuffer[String])(occupation: ArrayBuffer[String])(reservations: ArrayBuffer[String])
+
+@main("More profit") {
+
+    <div class="container">
+        <h1> Month with a total of more income </h1>
+        <div class="row justify-content-center">
+            <div class="card border-success mb-5" style="max-width: 40rem;">
+                <div class="card-header"> <b>
+                    @if(mes(0)=="1"){January}@if(mes(0)=="2"){February}@if(mes(0)=="3"){March}@if(mes(0)=="4"){April}@if(mes(0)=="5"){May}
+                    @if(mes(0)=="6"){June}@if(mes(0)=="7"){July}@if(mes(0)=="8"){August}@if(mes(0)=="9"){September}@if(mes(0)=="10"){October}
+                    @if(mes(0)=="11"){November}@if(mes(0)=="12"){December}</b>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Relevant information:</h5>
+                    <p class="card-text">
+                        Total occupancy: @occupation(0)
+                        </br>
+                        Reservations: @reservations(0)
+                        </br>
+                        <b style="color=#01DF3A"> Total income: @income </b>
+                    </p>
+                </div>
+            </div>
+        </div>
+        </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+    </div>
+}

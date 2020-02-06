@@ -214,13 +214,13 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-      out = """ SELECT name, email, phone, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
+      out = """ SELECT name, email, phones, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
       val hotelsDB = stmt.executeQuery(out)
 
       while (hotelsDB.next) {
         names += hotelsDB.getString("name")
         emails += hotelsDB.getString("email")
-        phones += hotelsDB.getString("phone")
+        phones += hotelsDB.getString("phones")
         amountAdults += hotelsDB.getString("amountAdults")
         amountOthers += hotelsDB.getString("amountOthers")
         spas += hotelsDB.getString("spa")
@@ -385,5 +385,29 @@ object Application extends Controller {
     Ok(views.html.thankYou())
   }
 
+  def moreProfit = Action {
+    var out = ""
+    // Creating array buffer
+    var month =  ArrayBuffer[String]()
+    var income =  ArrayBuffer[String]()
+    var occupation =  ArrayBuffer[String]()
+    var reservations =  ArrayBuffer[String]()
 
+    val conn = DB.getConnection()
+    try {
+      val stmt = conn.createStatement
+
+      val hotelsDB = stmt.executeQuery("SELECT month, SUM (total) AS income, SUM (amountAdults)+SUM(amountOthers) AS occupation, COUNT(phones) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1")
+
+      while (hotelsDB.next) {
+        month += hotelsDB.getString("month")
+        income += hotelsDB.getString("income")
+        occupation += hotelsDB.getString("occupation")
+        reservations += hotelsDB.getString("reservations")
+      }
+    } finally {
+      conn.close()
+    }
+    Ok(views.html.moreProfit(month)(income)(occupation)(reservations))
+  }
 }

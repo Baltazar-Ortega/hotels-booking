@@ -22,6 +22,8 @@ POST     /searchReservationForm     controllers.Application.searchReservationFor
 GET     /reservationUpdateForm/:phone    controllers.Application.reservationUpdateForm(phone: Int)
 POST     /reservationUpdate               controllers.Application.reservationUpdate(phone:Int)
 
+GET     /profit                      controllers.Application.moreProfit
+
 
 
 # Map static resources from the /public folder to the /assets URL path
