@@ -425,11 +425,7 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-<<<<<<< HEAD
       val hotelsDB = stmt.executeQuery("""SELECT month, SUM (total) AS income, SUM ("amountAdults")+SUM("amountOthers") AS occupation, COUNT(phone) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1""")
-=======
-      val hotelsDB = stmt.executeQuery("SELECT month, SUM (total) AS income, SUM (amountAdults)+SUM(amountOthers) AS occupation, COUNT(phone) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1")
->>>>>>> b0324489dfbe0e9cfa668b2fd8b917dcba5f27c8
 
       while (hotelsDB.next) {
         month += hotelsDB.getString("month")
