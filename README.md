@@ -1,8 +1,6 @@
-# scala/play-getting-started
+# hotels-booking Web App
 
-A barebones Scala app (using the Play framework), which can easily be deployed to Heroku.  
-
-This application support the [Getting Started with Scala/Play on Heroku](https://devcenter.heroku.com/articles/getting-started-with-scala) article - check it out.
+hotels-booking was made after this barebones getting-started play-framework code provided by Heroku:  https://github.com/heroku/scala-getting-started
 
 ## Running Locally
 
@@ -15,23 +13,8 @@ $ sbt compile stage
 $ heroku local
 ```
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+You need to have PostgreSQL installed
 
-## Deploying to Heroku
+Your app should now be running on [localhost:9000](http://localhost:9000/).
 
-```sh
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Play and Scala on Heroku, see these Dev Center articles:
-
-- [Play and Scala on Heroku](https://devcenter.heroku.com/categories/language-support#scala-and-play)
 
