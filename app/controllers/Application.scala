@@ -123,6 +123,7 @@ object Application extends Controller {
             "', email='"+email+"', phone="+originalPhone+","+
             """ "amountAdults"=  """+amountAdults+
             """, "amountOthers"=  """+amountOthers+
+            """, "amountOthers"=  """+amountOthers+
             ", spa="+spa+
             ", gym="+gym+", floor="+floor+", month="+month+
             """, "dayIn"=  """+dayIn+", nights="+nights+
@@ -214,13 +215,13 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-      out = """ SELECT name, email, phones, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
+      out = """ SELECT name, email, phone, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
       val hotelsDB = stmt.executeQuery(out)
 
       while (hotelsDB.next) {
         names += hotelsDB.getString("name")
         emails += hotelsDB.getString("email")
-        phones += hotelsDB.getString("phones")
+        phones += hotelsDB.getString("phone")
         amountAdults += hotelsDB.getString("amountAdults")
         amountOthers += hotelsDB.getString("amountOthers")
         spas += hotelsDB.getString("spa")
@@ -397,7 +398,7 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-      val hotelsDB = stmt.executeQuery("SELECT month, SUM (total) AS income, SUM (amountAdults)+SUM(amountOthers) AS occupation, COUNT(phones) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1")
+      val hotelsDB = stmt.executeQuery("SELECT month, SUM (total) AS income, SUM (amountAdults)+SUM(amountOthers) AS occupation, COUNT(phone) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1")
 
       while (hotelsDB.next) {
         month += hotelsDB.getString("month")
