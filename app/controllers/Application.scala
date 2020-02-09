@@ -123,7 +123,6 @@ object Application extends Controller {
             "', email='"+email+"', phone="+originalPhone+","+
             """ "amountAdults"=  """+amountAdults+
             """, "amountOthers"=  """+amountOthers+
-            """, "amountOthers"=  """+amountOthers+
             ", spa="+spa+
             ", gym="+gym+", floor="+floor+", month="+month+
             """, "dayIn"=  """+dayIn+", nights="+nights+
@@ -280,11 +279,15 @@ object Application extends Controller {
     val conn = DB.getConnection()
     try {
       val stmt = conn.createStatement
-      val executed = stmt.execute("DELETE FROM reservations WHERE phone ="+ phone +"")
-      println(executed)
-      if(executed) {
+
+      val queryStr = """SELECT * FROM public.reservations WHERE "phone" = """ + phone
+      val reservation = stmt.executeQuery(queryStr)
+      while (reservation.next) {
         found = true
       }
+
+      val executed = stmt.execute("DELETE FROM reservations WHERE phone ="+ phone +"")
+
     } finally {
       conn.close()
     }

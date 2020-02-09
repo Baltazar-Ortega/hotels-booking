@@ -4,74 +4,74 @@
 
 @main("Modify Reservation") {
 
-  <div class="container">
+    <div class="container">
 
 
-  @form(action = routes.Application.reservationUpdate(phone)) {
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input name="name" type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter name">
+    @form(action = routes.Application.reservationUpdate(phone)) {
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input name="name" type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+        </div>
+        <div class="form-group">
+            <label for="Phone">Phone</label>
+            <input name="phone" type="number" class="form-control" id="Phone" placeholder="Phone" required>
+        </div>
+        <div class="form-group">
+            <label for="adults">Amount of Adults</label>
+            <input name="adults" type="number" class="form-control" id="adults" placeholder="Number of Adults" required>
+        </div>
+        <div class="form-group">
+            <label for="childrenelder">Amount of children or elder</label>
+            <input name="childrenelder" type="number" class="form-control" id="childrenelder" placeholder="Number of children/elder" required>
+        </div>
+        <div class="form-group">
+            <label for="spa">Spa</label>
+            <select name="spa" class="form-control" id="spa" required>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="gym">Gym</label>
+            <select name="gym" class="form-control" id="gym" required>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="floor">Floor</label>
+            <select name="floor" class="form-control" id="floor" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="month">Month</label>
+            <input name="month" type="number" class="form-control" id="quantity" placeholder="month" min="1" max="12" required>
+        </div>
+        <div class="form-group">
+            <label for="dayIn">dayIn</label>
+            <input name="dayIn" type="number" class="form-control" id="dayIn" placeholder="dayIn" min="1" max="31" required>
+        </div>
+        <div class="form-group">
+            <label for="nights">How many nights would you like to stay?</label>
+            <input name="nights" type="number" class="form-control" id="nights" placeholder="nights" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="fcfm">Are you a student from FCFM?</label>
+            <select name="fcfm" class="form-control" id="fcfm" required>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    }
     </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-    </div>
-    <div class="form-group">
-      <label for="Phone">Phone</label>
-      <input name="phone" type="number" class="form-control" id="Phone" placeholder="Phone">
-    </div>
-    <div class="form-group">
-      <label for="adults">Amount of Adults</label>
-      <input name="adults" type="number" class="form-control" id="adults" placeholder="Number of Adults">
-    </div>
-    <div class="form-group">
-      <label for="childrenelder">Amount of children or elder</label>
-      <input name="childrenelder" type="number" class="form-control" id="childrenelder" placeholder="Number of children/elder">
-    </div>
-    <div class="form-group">
-      <label for="spa">Spa</label>
-      <select name="spa" class="form-control" id="spa">
-        <option value="1">Yes</option>
-        <option value="0">No</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="gym">Gym</label>
-      <select name="gym" class="form-control" id="gym">
-        <option value="1">Yes</option>
-        <option value="0">No</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="floor">Floor</label>
-      <select name="floor" class="form-control" id="floor">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="month">Month</label>
-      <input name="month" type="number" class="form-control" id="quantity" placeholder="month" min="1" max="12">
-    </div>
-    <div class="form-group">
-      <label for="dayIn">dayIn</label>
-      <input name="dayIn" type="number" class="form-control" id="dayIn" placeholder="dayIn" min="1" max="31">
-    </div>
-    <div class="form-group">
-      <label for="nights">How many nights would you like to stay?</label>
-      <input name="nights" type="number" class="form-control" id="nights" placeholder="nights" min="1" max="12">
-    </div>
-    <div class="form-group">
-      <label for="fcfm">Are you a student from FCFM?</label>
-      <select name="fcfm" class="form-control" id="fcfm">
-        <option value="1">Yes</option>
-        <option value="0">No</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  }
-</div>
 
 
 }

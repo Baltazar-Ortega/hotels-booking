@@ -3,70 +3,78 @@
 @(names: ArrayBuffer[String])(emails: ArrayBuffer[String])(phones: ArrayBuffer[String])(amountAdults: ArrayBuffer[String])(amountOthers: ArrayBuffer[String])(spas: ArrayBuffer[String])(gyms: ArrayBuffer[String])(floors: ArrayBuffer[String])(months: ArrayBuffer[String])(dayIn: ArrayBuffer[String])(nights: ArrayBuffer[String])(fcfms: ArrayBuffer[String])(totals: ArrayBuffer[String])(hotelName: ArrayBuffer[String])
 
 
-@main("All reservations") {
-    <div class="container">
-        <h1>All the reservations of Travel Cheap</h1>
-        </br></br></br></br>
-        <div class="row justify-content-center mb-5">
-            <ul style="list-style-type: none;">
-            @for(n <- names ){
-                <li>
-                    <div class="card border-info mb-3" style="max-width: 50rem;">
-                        <div class="card-header">
-                            <b> Titular: @n </b> <br><br>
-                            <b> @hotelName(names.indexOf(n)) </b>
+    @main("All reservations") {
+        <div class="container" >
+            <h1>All the reservations of Travel Cheap</h1>
+            </br></br></br></br>
+            <div class="row justify-content-center mb-5">
+                <ul style="list-style-type: none;">
+                @for(n <- names) {
+                    <li>
+                        <div class="card border-info mb-3" style="max-width: 50rem;">
+                            <div class="card-header">
+                                <b> Titular: @n </b>
+                                <br>
+                                <br>
+                                <b> @hotelName(names.indexOf(n)) </b>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b>Contact</b>
+                                        <hr>
+                                        E-mail: @emails(names.indexOf(n))
+                                        </br>
+                                        Phone: @phones(names.indexOf(n))
+                                        </br> </br>
+                                        <b>Persons</b>
+                                        <hr>
+                                        Adults: @amountAdults(names.indexOf(n))
+                                        </br>
+                                        Others: @amountOthers(names.indexOf(n))
+                                        </br> </br> </br> </br>
+                                    </td>
+                                    <td>.  .  .</td>
+                                    <td>
+                                        <b>Services                  </b>
+                                        <hr>
+                                        Spa: @if(spas(names.indexOf(n)) == "1") { yes } @if(spas(names.indexOf(n)) != "1") { no }
+                                        </br>
+                                        Gym: @if(gyms(names.indexOf(n)) == "1") { yes } @if(gyms(names.indexOf(n)) != "1") { no }
+                                        </br> </br>
+                                        <b>Other data</b>
+                                        <hr>
+                                        Floor of room: @floors(names.indexOf(n))
+                                        </br>
+                                        Month of arrival: @months(names.indexOf(n))
+                                        </br>
+                                        Day of arrival: @dayIn(names.indexOf(n))
+                                        </br>
+                                        Lodging nights: @nights(names.indexOf(n))
+                                        </br>
+                                        Student Discount:: @if(fcfms(names.indexOf(n)) == "1") { yes } @if(fcfms(names.indexOf(n)) != "1") { no }
+                                    </td>
+                                    <td>.  .  .</td>
+                                    <td>
+                                    </br> </br> </br> </br> </br> </br> </br> </br> </br> </br>
+                                    <b>Total: @totals(names.indexOf(n))</b>
+                                    </td>
+                                </tr>
+                            </table>
+                                </p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <b>Contact</b>
-                                            <hr>
-                                            E-mail: @emails(names.indexOf(n))
-                                            </br>
-                                            Phone: @phones(names.indexOf(n))
-                                            </br></br>
-                                            <b>Persons</b>
-                                            <hr>
-                                            Adults: @amountAdults(names.indexOf(n))
-                                            </br>
-                                            Others: @amountOthers(names.indexOf(n))
-                                            </br></br></br></br>
-                                        </td>
-                                        <td>.  .  .</td>
-                                        <td>
-                                            <b>Services                  </b>
-                                            <hr>
-                                            Spa: @if(spas(names.indexOf(n))=="1"){ yes } @if(spas(names.indexOf(n))!="1"){ no }
-                                            </br>
-                                            Gym: @if(gyms(names.indexOf(n))=="1"){ yes } @if(gyms(names.indexOf(n))!="1"){ no }
-                                            </br></br>
-                                            <b>Other data</b>
-                                            <hr>
-                                            Floor of room: @floors(names.indexOf(n))
-                                            </br>
-                                            Month of arrival: @months(names.indexOf(n))
-                                            </br>
-                                            Day of arrival: @dayIn(names.indexOf(n))
-                                            </br>
-                                            Lodging nights: @nights(names.indexOf(n))
-                                            </br>
-                                            Student Discount:: @if(fcfms(names.indexOf(n))=="1"){ yes } @if(fcfms(names.indexOf(n))!="1"){ no }
-                                        </td>
-                                        <td>.  .  .</td>
-                                        <td>
-                                        </br></br></br></br></br></br></br></br></br></br>
-                                            <b>Total: @totals(names.indexOf(n))</b>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </p>
-                        </div>
-                    </div>
-                </li>
-            }
-            </ul>
+                    </li>
+                }
+                </ul>
+            </div>
+            <div>
+                <button class="btn btn-lg btn-primary">
+                    <a style="color: white;" href='/admin'>Back to admin</a>
+                </button>
+            </div>
+            </br> </br> </br> </br>
         </div>
-    </div>
-}
+    }
