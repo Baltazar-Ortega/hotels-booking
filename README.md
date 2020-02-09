@@ -1,6 +1,6 @@
 # hotels-booking Web App
 
-With TravelCheap you make a reservation in your favorite hotel.
+With TravelCheap you can make a reservation in your favorite hotel.
 And also get to know interesting data with the admin page. 
 
 hotels-booking was made after this barebones code provided by Heroku:  https://github.com/heroku/scala-getting-started
