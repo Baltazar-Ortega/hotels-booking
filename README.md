@@ -1,5 +1,8 @@
 # hotels-booking Web App
 
+With TravelCheap you make a reservation in your favorite hotel.
+And also get to know interesting data with the admin page. 
+
 hotels-booking was made after this barebones code provided by Heroku:  https://github.com/heroku/scala-getting-started
 
 ## For the Users
@@ -22,9 +25,10 @@ hotels-booking was made after this barebones code provided by Heroku:  https://g
 Make sure you have Play and sbt installed.  
 
 ```sh
-$ git clone https://github.com/heroku/scala-getting-started.git
-$ cd scala-getting-started
+$ git clone https://github.com/Baltazar-Ortega/hotels-booking.git
+$ cd hotels-booking
 $ sbt compile stage
+$ sbt run
 ```
 
 You need to have PostgreSQL installed
