@@ -148,6 +148,7 @@ object Application extends Controller {
     val formBody = body.asFormUrlEncoded
 
     val phone = formBody.get("phone")(0).toInt
+    var found = false
     // Application.searchReservationDB(phone)
 
     val stringValues = ArrayBuffer[String]()
@@ -163,6 +164,9 @@ object Application extends Controller {
       // println(queryStr)
       //val rs = stmt.executeQuery("SELECT tick FROM ticks")
       val reservation = stmt.executeQuery(queryStr)
+
+        
+      
 
       while (reservation.next) {
         val name = reservation.getString("name")
@@ -183,12 +187,20 @@ object Application extends Controller {
         println("In search reservation")
         println(stringValues)
         println(numericValues)
+        found = true
       }
-    } finally {
+    } catch {
+      case e: Throwable => e.printStackTrace
+    }finally {
       conn.close()
     }
 
-    Ok(views.html.showReservation(stringValues)(numericValues)(action))
+    if (found){
+      Ok(views.html.showReservation(stringValues)(numericValues)(action))
+    } else {
+      Ok(views.html.phoneNotFound())
+    }
+    
 
   }
 
@@ -214,13 +226,13 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-      out = """ SELECT name, email, phones, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
+      out = """ SELECT name, email, phone, "amountAdults", "amountOthers", spa, gym, fcfm, floor, month, "dayIn", nights, total, "hotelName" FROM public.reservations;"""
       val hotelsDB = stmt.executeQuery(out)
 
       while (hotelsDB.next) {
         names += hotelsDB.getString("name")
         emails += hotelsDB.getString("email")
-        phones += hotelsDB.getString("phones")
+        phones += hotelsDB.getString("phone")
         amountAdults += hotelsDB.getString("amountAdults")
         amountOthers += hotelsDB.getString("amountOthers")
         spas += hotelsDB.getString("spa")
@@ -248,6 +260,8 @@ object Application extends Controller {
     val body: AnyContent = request.body
     val formBodyDelete = body.asFormUrlEncoded
 
+    var found = false
+
     // Seq: trait that represents indexed sequences (defined order) that are immutable
     // Map: collection of key-value pairs
     val dato: Seq[String] = {
@@ -258,19 +272,32 @@ object Application extends Controller {
       }
       }.getOrElse(Seq.empty[String])
 
-    println(dato)
+    // println(dato)
 
     val phone = dato(0)
     var out = ""
     val conn = DB.getConnection()
     try {
       val stmt = conn.createStatement
-      stmt.execute("DELETE FROM reservations WHERE phone ="+ phone +"")
+      val executed = stmt.execute("DELETE FROM reservations WHERE phone ="+ phone +"")
+      println(executed)
+      if(executed) {
+        found = true
+      }
     } finally {
       conn.close()
     }
-    //println(phone)
-    Ok(views.html.confirmOperation("delete"))
+
+    if (found){
+      Ok(views.html.confirmOperation("delete"))
+    } else {
+      Ok(views.html.phoneNotFound())
+    }
+    
+    
+    
+    
+    
   }
 
 
@@ -397,7 +424,7 @@ object Application extends Controller {
     try {
       val stmt = conn.createStatement
 
-      val hotelsDB = stmt.executeQuery("SELECT month, SUM (total) AS income, SUM (amountAdults)+SUM(amountOthers) AS occupation, COUNT(phones) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1")
+      val hotelsDB = stmt.executeQuery("""SELECT month, SUM (total) AS income, SUM ("amountAdults")+SUM("amountOthers") AS occupation, COUNT(phone) AS reservations FROM reservations GROUP BY month ORDER BY SUM (total) DESC LIMIT 1""")
 
       while (hotelsDB.next) {
         month += hotelsDB.getString("month")
