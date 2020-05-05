@@ -3,6 +3,8 @@
 With TravelCheap you can make a reservation in your favorite hotel.
 And also get to know interesting data with the admin page. 
 
+Live WebApp: https://still-castle-24972.herokuapp.com/
+
 hotels-booking was made after this barebones code provided by Heroku:  https://github.com/heroku/scala-getting-started
 
 ## For the Users
